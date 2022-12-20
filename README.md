@@ -1,3 +1,8 @@
+Batuhan Arat 68665
+Ecem Kuloğlu 71957
+
+
+
 This project is aimed for parsing the data that we attained from Kusis. 
 This data is pulled by copying by all the page information at Kusis's class search class.
 
