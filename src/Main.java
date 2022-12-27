@@ -10,15 +10,20 @@ public class Main {
     static String day;
     static String time;
     static  String classroom;
-    static String blockSeparator = "Class\tSection\tDays & Times\tRoom\tInstructor\tMeeting Dates\tStatus";
+    static String temp;
 
+    static String[] blockArray = new String[100];
+
+
+    static Boolean normal = true;
+
+    static String blockSeparator = "Class\tSection\tDays & Times\tRoom\tInstructor\tMeeting Dates\tStatus";
+    static String anotherBlockSeparator = "Bölümü daralt";
 
 
     public static void main(String[] args) throws IOException {
 
-
         prepareInput();
-
 
 
         String inputPath = "src/Resources/raw" + day + "Data.txt";
@@ -31,40 +36,81 @@ public class Main {
 
         while(scan.hasNextLine()) {
 
-            if(scan.nextLine().equals(blockSeparator) ) {
+            if (scan.nextLine().equals(blockSeparator)) {
 
-                for(int i = 0 ; i<3 ; i++) {
+                for (int i = 0; i < 3; i++) {
                     scan.nextLine();
                 }
 
-                 time =scan.nextLine();
-                 classroom = scan.nextLine();
+                temp = scan.nextLine();
+
+                int blockIndex = 0;
+                while(!(temp.contains(",") || temp.contains("Staff"))) {
+
+                    blockArray[blockIndex] = temp;
+                    blockIndex++;
+                    temp = scan.nextLine();
+
+                }
+
+                int blockLength = blockIndex;
+
+                String[] timeArray = new String[300];
+                String[] classroomArray = new String[300];
 
 
-                 //we do not want data with no classroom specified.
-                //our database should have information about classrooms and time period
+                for(int i =0 ; i< blockLength; i++) {
+
+                    if(i > (blockLength/2)-1) {
+                        classroomArray[i] = blockArray[i];
+                    } else {
+                        timeArray[i] = blockArray[i];
+
+                    }
+                }
+
+                // make blockArray for after usage
+
+                for(int i =0 ; i< blockLength; i++) {
+                    blockArray[i] = null;
+                }
 
 
-                 if(!classroom.equals("TBA")) {
+                for (int a = 0; (a < blockLength/2); a++) {
+                   int newindex = blockLength/2;
 
-                     //In kusis data, there are block sections that includes other days class schedule.
-                     //So if I want to examine specific day's schedule, I do not want information about other days.
-                     if(time.contains(dayIdentifier)) {
-                         writer.write(time);
-                         writer.write(",");
-                         writer.write(classroom);
-                         writer.write("\n");
+                    time = timeArray[a];
+                    classroom = classroomArray[newindex+a];
 
-                     }
-                 }
+                    if(time.contains(dayIdentifier)) {
+
+                        if(!classroom.equals("TBA")) {
+                            if(!time.equals("TBA")) {
+
+                                writer.write(time);
+                                writer.write(",");
+                                writer.write(classroom);
+                                writer.write("\n");
+
+                            }
+                        }
+                    }
+                }
+
+
+
 
             }
+
 
         }
 
         writer.close();
 
     }
+
+
+
 
 
 
@@ -98,7 +144,7 @@ public class Main {
 
        Scanner sc= new Scanner(System.in); //System.in is a standard input stream
        System.out.println("Enter a day identifier for wanted day.");
-       System.out.println("Mo for Monday, Tu for Tuesday, We for Wednesday, Thu for Thursday, Fri for Friday");
+       System.out.println("Mo for Monday, Tu for Tuesday, We for Wednesday, Th for Thursday, Fr for Friday");
        System.out.println("Enter an identifier: ");
 
        dayIdentifier =sc.nextLine();
@@ -108,7 +154,7 @@ public class Main {
 
 
            System.out.println("Your format is not true!");
-           System.out.println("Mo for Monday, Tu for Tuesday, We for Wednesday, Thu for Thursday, Fri for Friday");
+           System.out.println("Mo for Monday, Tu for Tuesday, We for Wednesday, Th for Thursday, Fr for Friday");
            System.out.println("Enter an identifier: ");
            dayIdentifier = sc.nextLine();
            setTheDate(dayIdentifier);
