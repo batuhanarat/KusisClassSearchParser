@@ -1,8 +1,6 @@
 Batuhan Arat 68665
 
 
-Ecem Kuloğlu 71957
-
 
 
 This project is aimed for parsing the data that we attained from Kusis. 
